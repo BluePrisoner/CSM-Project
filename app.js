@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-const pool = require('./dbConnect.js');
+const pool = require('./db/dbConnect.js');
 
 const port = 8080;
+
+app.use(express.static('./public'));
 
 app.get('/',(req,res) => {
     res.status(200).send("Home Page");
