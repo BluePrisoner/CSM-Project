@@ -1,8 +1,15 @@
+
+
+
 const login = async (req,res) => {
-    res.status(200).send('Fake login');
+    res.render('login');
 }
 
 const dashboard = async (req,res) => {
-    res.status(200).send('Dashboard');
+    res.render('dashboard', {user : 'Kiran'});
 }
-module.exports  = {login,dashboard};
+
+const register = async (req,res) => {
+    res.render('register')
+}
+module.exports  = {login,dashboard,register};
