@@ -1,7 +1,7 @@
 
 const {bcryptHash} = require('./bcryptHash.js');
 
-const formValidationErrors = async (req,res)=> {
+const formValidationErrors = async (req)=> {
     
     let{name,email,password,password2} = req.body;
     console.log({
@@ -22,10 +22,13 @@ const formValidationErrors = async (req,res)=> {
     }
 
     if(errors.length > 0){
-        res.render('register', {errors})
-    }else{
-        bcryptHash(password);
-    }
+        return errors; 
+    }   
+    
+    req.body.password =  await bcryptHash(password);
+    
+
+    return [];
 }    
 
 module.exports = {formValidationErrors};

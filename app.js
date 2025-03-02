@@ -16,7 +16,7 @@ app.use(express.urlencoded({extended: false}));
 
 
 app.use(express.static('./public'));
-app.use('/', authRouter);
+app.use('/', authRouter); 
 
 
 app.use('/', homeRouter);
