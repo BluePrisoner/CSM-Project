@@ -26,6 +26,15 @@
         </div>
         <a href="/user/login">Already registered? Login here</a>
     </form>
+
+    <ul>
+        <% if (typeof errors !== 'undefined') { %>
+            <% errors.forEach(function(error) { %>
+                <li><%= error.message %></li>
+            <% }); %>
+        <% } %>
+    </ul>
+    
     
 </body>
 </html>

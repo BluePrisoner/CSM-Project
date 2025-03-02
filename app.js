@@ -7,9 +7,11 @@ const path = require('path');
 require('express-async-errors');
 
 
-app.set("views", path.join(__dirname, "views")); //use will using ejs files..
+app.set("views", path.join(__dirname, "views")); //use while using ejs files..
 
-app.set('view engine','ejs'); //use will using ejs files..
+app.set('view engine','ejs'); //use while using ejs files..
+
+app.use(express.urlencoded({extended: false}));
 
 
 
