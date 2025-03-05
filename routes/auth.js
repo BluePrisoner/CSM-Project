@@ -4,13 +4,17 @@ const path = require('path');
 
 
 require('dotenv').config();
-const {login,dashboard,register,registerPayload} = require('../controllers/auth.js')
+const {login,dashboard,register,registerPayload,loginPayLoad, logout} = require('../controllers/auth.js')
+const {authenticateUser} = require('../middleware/authMiddleware.js')
+const {redirectIfAuthenticated} = require('../middleware/redirectAlreadyAuth.js');
+
 
 router.use('/user/login/static', express.static(path.join(__dirname, '..', 'public', 'login', 'auth')));
 
-router.route('/user/dashboard').get(dashboard);
-router.route('/user/login').get(login);
-router.route('/user/register').get(register).post(registerPayload);
+router.route('/user/dashboard').get(authenticateUser,dashboard);
+router.route('/user/login').get(redirectIfAuthenticated,login).post(loginPayLoad);
+router.route('/user/register').get(redirectIfAuthenticated,register).post(registerPayload);
+router.route('/user/logout').get(logout)
 
 
 
