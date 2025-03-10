@@ -8,7 +8,9 @@
 </head>
 <body>
     <h2>Hello, <%= user %></h2>
-    <a href="/user/logout">Logout</a>
+    <form action="/user/logout" method="post">
+        <button type = "submit" id = "logout-button">Logout</button>
+    </form>
     
 </body>
 </html>

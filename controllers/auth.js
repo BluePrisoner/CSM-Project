@@ -6,7 +6,12 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const login = async (req,res) => {
-    res.render('login');
+
+    const message =  req.query.message;
+    if(!message){
+        return res.render('login');
+    }
+    res.render('login', {errors : [{message : message}]});
 }
 
 const dashboard = async (req,res) => {
@@ -46,6 +51,7 @@ const registerPayload = async (req,res) => {
 
     await pool.query(`INSERT into credentials (name,email,password) values ($1,$2,$3);`, [name,email,password]);
     console.log("User registered with credentials : ", {name,email,password});
+    return res.redirect("/user/login?message=Success" );
    } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");

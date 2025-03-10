@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const pool = require('./db/dbConnect.js');
 const authRouter = require('./routes/auth.js')
 const homeRouter = require('./routes/home.js')
 const path = require('path');
@@ -8,7 +7,9 @@ const cookieParser = require('cookie-parser');
 require('express-async-errors');
 
 
+app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "views")); //use while using ejs files..
+
 
 app.set('view engine','ejs'); //use while using ejs files..
 
@@ -18,9 +19,9 @@ app.use(express.json());
 
 app.use(cookieParser()); // Use while using jwt tokens
 
+// app.use(flash());
 
 
-app.use(express.static('./public'));
 app.use('/', authRouter); 
 
 
