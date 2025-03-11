@@ -65,11 +65,13 @@ const loginPayLoad = async (req,res) => {
         const user = await pool.query(`SELECT * FROM credentials where email = $1;`,[email]);
         console.log(email,password);
         if(user.rows.length===0){
-            return res.render("login", {errors  : [{message : "Invalid username or password"}]})
+            return res.json({ success: false, message: "Invalid username or password" });
+
         }
         const isMatch = await bcrypt.compare(password, user.rows[0].password);
         if(!isMatch){
-            return res.render("login", {errors  : [{message : "Invalid username or password"}]});
+            return  res.json({ success: false, message: "Invalid username or password" });
+
         }
         console.log("accepted");
         const token = await jwt.sign({id : user.rows[0].id, email: user.rows[0].email},process.env.JWT_SECRET_KEY,{expiresIn:'6h'});
@@ -79,7 +81,7 @@ const loginPayLoad = async (req,res) => {
             sameSite:"Strict",
             secure:false //set it to true in production
         })
-       return res.redirect("/user/dashboard");
+       return res.json({success : true});
 
     } catch (error) {
         console.log("Database Server Error", error);
