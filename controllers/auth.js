@@ -44,12 +44,12 @@ const registerPayload = async (req,res) => {
 
 
    try {
-    const existingUser = await pool.query(`SELECT * FROM credentials WHERE email = $1;`, [email]);
+    const existingUser = await pool.query(`SELECT * FROM public.credentials WHERE email = $1;`, [email]);
     if(existingUser.rows.length > 0){
         return res.render("register", {errors : [{message : "User already exists, Please Login"}]})
     }
 
-    await pool.query(`INSERT into credentials (name,email,password) values ($1,$2,$3);`, [name,email,password]);
+    await pool.query(`INSERT into public.credentials (name,email,password) values ($1,$2,$3);`, [name,email,password]);
     console.log("User registered with credentials : ", {name,email,password});
     return res.redirect("/user/login?message=Success" );
    } catch (error) {
@@ -62,7 +62,7 @@ const registerPayload = async (req,res) => {
 const loginPayLoad = async (req,res) => {
     let {email,password} = req.body;
     try {
-        const user = await pool.query(`SELECT * FROM credentials where email = $1;`,[email]);
+        const user = await pool.query(`SELECT * FROM public.credentials where email = $1;`,[email]);
         console.log(email,password);
         if(user.rows.length===0){
             return res.json({ success: false, message: "Invalid username or password" });
