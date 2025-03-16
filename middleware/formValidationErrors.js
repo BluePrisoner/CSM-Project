@@ -3,14 +3,16 @@ const {bcryptHash} = require('./bcryptHash.js');
 
 const formValidationErrors = async (req)=> {
     
-    let{name,email,password,password2} = req.body;
+    let{fname,email,password,password2,phone,address} = req.body;
     console.log({
-        name,email,password,password2
+        fname,email,password,password2
     });
 
     let errors = [];
 
-    if(!name || !email || !password || !password2){
+    const phone_num = String(Math.abs(phone));
+
+    if(!fname || !email || !password || !password2){
         errors.push({message : "Please enter all fields"});
     }
 
@@ -20,10 +22,19 @@ const formValidationErrors = async (req)=> {
     if(password != password2){
         errors.push({message : "Confirm password doesnot match"});
     }
+    if(phone_num.length !== 10){
+        errors.push({message : "Phone number must be 10 digits"});
+    }
+
+    if(address.length < 10){
+        errors.push({message : "Enter valid address"});
+    }
 
     if(errors.length > 0){
         return errors; 
     }   
+
+
     
     req.body.password =  await bcryptHash(password);
     

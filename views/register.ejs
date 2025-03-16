@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <title>Document</title>
 </head>
@@ -10,10 +11,27 @@
     <h1>Register</h1>
     <form action="/user/register" method="post">
         <div>
-            <input type="text" id = "name", name = "name", placeholder="Name" required>
+            <input type="text" id = "fname", name = "fname", placeholder="First Name" required>
+        </div>
+        <div>
+            <input type="text" id = "lname", name = "lname", placeholder="Last Name" required>
         </div>
         <div>
             <input type="text" id = "email", name = "email", placeholder="E-mail" required>
+        </div>
+        <div>
+        <label for="provider-select">Choose a Provider:</label>
+           <select name="provider_name" id="provider_name">
+                <option value="BBNL">BBNL</option> 
+                <option value="NetPlus">NetPlus</option> 
+                <option value="TeleC">TeleC</option> 
+           </select>
+        </div>
+        <div>
+            <input type="number" id="phone" name="phone", placeholder="Phone Number" required>
+        </div>
+        <div>
+            <input type="text" id="address", name="address", placeholder="Enter Address" required>
         </div>
         <div>
             <input type="password" id = "password", name = "password", placeholder="Enter Password" required>
