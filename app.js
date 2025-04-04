@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const authRouter = require('./routes/auth.js')
 const homeRouter = require('./routes/home.js')
+const errorRouter = require('./routes/errors.js')
 const path = require('path');
 const cookieParser = require('cookie-parser');
 require('express-async-errors');
@@ -33,9 +34,7 @@ app.get('/about', (req, res) => {
 
 
 
-app.all('*', (req, res) => {
-    res.status(404).send('404 Not Found');
-})
+app.all('*',errorRouter);
 
 
 const start = async () => {
