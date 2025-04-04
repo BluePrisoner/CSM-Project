@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-    <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <title>Customer Dashboard</title>
 </head>
 <body>
-    <h2>Hello, <%= user %></h2>
-    <form action="/user/logout" method="post">
-        <button type = "submit" id = "logout-button">Logout</button>
-    </form>
-    
-</body>
+    <div class="navbar">
+      <div><strong>Customer Dashboard</strong></div>
+      <form action="/user/logout" method="POST">
+        <button class="logout" type="submit">Logout</button>
+      </form>
+    </div>
+  
+    <div class="main">
+      <div class="sidebar">
+        <button onclick="showSection('plan')">📦 Plan</button>
+        <button onclick="showSection('subscription')">📃 Subscription</button>
+        <button onclick="showSection('recharge')">🔋 Recharge</button>
+        <button onclick="showSection('billing')">💳 Billing</button>
+        <button onclick="showSection('userinfo')">👤 User Info</button>
+        <button onclick="showSection('support')">🛠️ Support</button>
+      </div>
+  
+      <div class="content">
+        <div id="plan">
+          <h2>Plan</h2>
+          <p>Details about your current plan and available upgrades.</p>
+        </div>
+  
+        <div id="subscription" class="hidden">
+          <h2>Subscription</h2>
+          <p>Manage your active subscriptions here.</p>
+        </div>
+  
+        <div id="recharge" class="hidden">
+          <h2>Recharge</h2>
+          <p>Top-up your balance or renew services.</p>
+        </div>
+  
+        <div id="billing" class="hidden">
+          <h2>Billing</h2>
+          <p>View and download billing history.</p>
+        </div>
+  
+        <div id="userinfo" class="hidden">
+          <h2>User Info</h2>
+          <p>Update your profile and account settings.</p>
+        </div>
+  
+        <div id="support" class="hidden">
+          <h2>Support</h2>
+          <p>Contact support or browse help articles.</p>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      function showSection(id) {
+        const sections = document.querySelectorAll('.content > div');
+        sections.forEach(section => {
+          section.classList.add('hidden');
+        });
+        document.getElementById(id).classList.remove('hidden');
+      }
+    </script>
+  </body>
+  </html>
+  
 </html>
