@@ -5,6 +5,7 @@
     <thead>
       <tr>
         <th>Plan Type</th>
+        <th>Provider</th>
         <th>Start Date</th>
         <th>End Date</th>
         <th>Status</th>
@@ -14,6 +15,7 @@
       <% subscriptions.forEach(sub => { %>
         <tr>
           <td><%= sub.plan_type %></td>
+          <td><%= sub.provider_name %></td>
           <td><%= new Date(sub.start_date).toLocaleDateString() %></td>
           <td><%= new Date(sub.end_date).toLocaleDateString() %></td>
           <td>

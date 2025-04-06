@@ -1,0 +1,108 @@
+<h2>Recharge Your Plan</h2>
+
+<div id="plan-data" data-plans='<%= JSON.stringify(planDetails) %>' hidden></div>
+
+
+<% if (typeof message !== 'undefined') { %>
+  <div class="overlay">
+    <div class="payment-card">
+      <h2>✅ Payment Successful</h2>
+      <p><%= message %></p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+<% } %>
+
+
+<form id="paymentForm" action="/user/dashboard/recharge" method="POST" class="recharge-form">
+  <label for="plan_type">Select Plan Type:</label>
+  <select name="plan_type" id="plan_type" required>
+    <option value="">--Select--</option>
+    <option value="Basic">Basic</option>
+    <option value="Standard">Standard</option>
+    <option value="Premium">Premium</option>
+  </select>
+
+  <label for="days">Select Duration (Days):</label>
+  <select name="days" id="days" required>
+    <option value="">--Select--</option>
+    <option value="30">30 Days</option>
+    <option value="60">60 Days</option>
+    <option value="90">90 Days</option>
+    <option value="365">365 Days</option>
+  </select>
+
+  <label for="provider_name">Provider:</label>
+  <select name="provider_name" id="provider_name" required>
+    <option value="">--Select--</option>
+    <option value="BBNL">BBNL</option>
+    <option value="TeleC">TeleC</option>
+    <option value="NetPlus">NetPlus</option>
+  </select>
+
+  <p><strong>Total Price:</strong> ₹<span id="price-output">0</span></p>
+
+  <button type="button" onclick="showConfirmation()">Confirm Payment</button>
+</form>
+
+<!-- Confirmation Overlay -->
+<div class="overlay" id="confirmationOverlay" style="display: none;">
+  <div class="payment-card">
+    <h2>Confirm Your Payment</h2>
+    <p>Are you sure you want to proceed with this payment?</p>
+    <button onclick="submitPayment()">Yes, Confirm</button>
+    <button onclick="closeOverlay()" style="margin-left: 10px;">Cancel</button>
+  </div>
+</div>
+<script>
+  const planSelect = document.getElementById('plan_type');
+  const daysSelect = document.getElementById('days');
+  const providerSelect = document.getElementById('provider_name');
+  const priceOutput = document.getElementById('price-output');
+  const overlay = document.getElementById('confirmationOverlay');
+  const form = document.getElementById('paymentForm');
+
+  function calculatePrice() {
+    const planDetails = JSON.parse(document.getElementById('plan-data').dataset.plans || '[]');
+
+    const plan = planSelect.value;
+    const days = parseInt(daysSelect.value);
+    const provider = providerSelect.value;
+
+    const detail = planDetails.find(p =>
+      p.plan_type === plan && p.provider_name === provider
+    );
+
+    if (detail && !isNaN(days)) {
+      const total = parseFloat(detail.price_rate * days);
+      priceOutput.textContent = total.toFixed(2);
+    } else {
+      priceOutput.textContent = '0';
+    }
+  }
+
+  function showConfirmation() {
+    // Only show overlay if form is valid
+    if (form.checkValidity()) {
+      overlay.style.display = 'flex';
+    } else {
+      form.reportValidity(); // Triggers browser validation
+    }
+  }
+
+  function closeOverlay() {
+    overlay.style.display = 'none';
+  }
+
+  function submitPayment() {
+    form.submit();
+  }
+
+  planSelect.addEventListener('change', calculatePrice);
+  daysSelect.addEventListener('change', calculatePrice);
+  providerSelect.addEventListener('change', calculatePrice);
+</script>
+
+  
+  
+

@@ -3,6 +3,7 @@
 <% if (plan) { %>
   <div class="plan-card">
     <p><strong>Plan type:</strong> <%= plan.plan_type %></p>
+    <p><strong>Provider:</strong> <%= plan.provider_name %></p>
     <p><strong>Start Date:</strong> <%= new Date(plan.start_date).toLocaleDateString() %></p>
     <p><strong>End Date:</strong> <%= new Date(plan.end_date).toLocaleDateString() %></p>
     <p>

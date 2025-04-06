@@ -124,6 +124,100 @@ const updatePlanStatus = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   };
+
+  
+  const renderRechargePage = async (req, res) => {
+    try {
+      const result = await pool.query(`
+        SELECT provider_name, plan_type, price_rate
+        FROM plan_details
+      `);
+  
+      const planDetails = result.rows;
+  
+      res.render('user/recharge', { planDetails }, (err, html) => {
+        if (err) {
+          console.error("Error rendering recharge page:", err);
+          return res.status(500).send("Internal error");
+        }
+  
+        res.render('dashboard', {
+          title: 'Recharge',
+          body: html
+        });
+      });
+  
+    } catch (error) {
+      console.error("Recharge Page Error:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+
+  const handleRecharge = async (req, res) => {
+    const { plan_type, days, provider_name } = req.body;
+    console.log(req.user);
+    const user_email = req.user.email; // Email from req.user
+  
+    try {
+      // Step 1: Get customer info via email
+      const custQuery = `
+        SELECT c.customer_id
+        FROM public.customer c
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1
+      `;
+      const custResult = await pool.query(custQuery, [user_email]);
+  
+      if (custResult.rowCount === 0) {
+        return res.status(404).send("Customer not found");
+      }
+  
+      const customer_id = custResult.rows[0].customer_id;
+  
+      // Step 2: Get price_rate from plan_details
+      const priceQuery = `
+        SELECT price_rate 
+        FROM plan_details 
+        WHERE plan_type = $1 AND provider_name = $2
+      `;
+      const priceResult = await pool.query(priceQuery, [plan_type, provider_name]);
+  
+      if (priceResult.rowCount === 0) {
+        return res.status(400).send("Plan or provider not found");
+      }
+  
+      const price_rate = parseFloat(priceResult.rows[0].price_rate);
+      const total_price = price_rate * parseInt(days);
+  
+      // Step 3: Insert into subscription table
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setDate(startDate.getDate() + parseInt(days));
+  
+      const insertSubscription = `
+        INSERT INTO subscription (customer_id, plan_type, provider_name, start_date, end_date,status)
+        VALUES ($1, $2, $3, $4, $5,$6)
+      `;
+      await pool.query(insertSubscription, [customer_id, plan_type, provider_name, startDate, endDate, 'active']);
+  
+      // Step 4: Insert into billing table
+      const insertBilling = `
+        INSERT INTO billing (customer_id, provider_name, bill_date, amount,status)
+        VALUES ($1, $2, CURRENT_DATE, $3,$4)
+      `;
+      await pool.query(insertBilling, [customer_id, provider_name, total_price,'success']);
+  
+      res.redirect('/user/dashboard?flash=Recharge successful!');
+    } catch (error) {
+      console.error("Recharge error:", error);
+      res.status(500).send("Recharge failed.");
+    }
+  };
+
+
+  
+  
+  
   
 
-module.exports = { renderPlanPage,updatePlanStatus,renderSubPage };
+module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge };

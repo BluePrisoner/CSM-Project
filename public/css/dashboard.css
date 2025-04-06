@@ -218,7 +218,143 @@ h2 {
 }
 
 
+/* Payment */
+.recharge-form {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: #fff;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  margin: 30px auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+.recharge-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.recharge-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.recharge-form select {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #ffffff;
+  color: #27ae60;
+  font-weight: bold;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.recharge-form select:focus {
+  outline: none;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+  border-color: #ffffff;
+}
+
+.recharge-form p {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  color: #ffffff;
+}
+
+.recharge-form button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  color: #27ae60;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.recharge-form button:hover {
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+
+/* Overlay styles */
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.payment-card {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: #fff;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  animation: scaleIn 0.25s ease-in-out;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.payment-card h2 {
+  font-size: 26px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.payment-card p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.payment-card button {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border: none;
+  color: #27ae60;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0 6px;
+}
+
+.payment-card button:hover {
+  background-color: #27ae60;
+  color: #ffffff;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0 }
+  to   { transform: scale(1); opacity: 1 }
+}
 
 /* Logout button */
 .logout {
