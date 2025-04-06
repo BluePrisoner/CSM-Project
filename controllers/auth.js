@@ -33,27 +33,46 @@ const adminDashboard = async (req,res)=> {
     }
 }
 
-const dashboard = async (req,res) => {
-
-    
-try {
-    if (!req.user || !req.user.email) {
+const dashboard = async (req, res) => {
+    try {
+      if (!req.user || !req.user.email) {
         return res.status(401).send("Unauthorized access");
+      }
+  
+      const email = req.user.email;
+      const userData = await pool.query(`
+        SELECT c.*
+        FROM public.customer c
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1;
+      `, [email]);
+  
+      if (!userData.rows.length) {
+        return res.status(404).send("User not found");
+      }
+  
+      const displayName = `${userData.rows[0].fname} ${userData.rows[0].lname}`;
+  
+      res.locals.user = displayName;
+  
+      res.render('user/plan', {}, (err, html) => {
+        if (err) {
+          console.error("Error rendering plan:", err);
+          return res.status(500).send("Internal error");
+        }
+  
+        res.render('dashboard', {
+          title: 'Plan',
+          body: html
+        });
+      });
+  
+    } catch (error) {
+      console.error("Display Name Error", error);
+      res.render('401page');
     }
-    const email = req.user.email;
-    const user = await pool.query(`SELECT c.*
-                                    FROM public.customer c
-                                    JOIN public.user u ON c.user_id = u.user_id
-                                    WHERE u.email = $1;`, [email]);
-    const displayName = user.rows[0].fname + ' ' + user.rows[0].lname;
-    return res.render('dashboard', {user : displayName})
-} catch (error) {
-    console.log("Display Name Error", error);
-    res.render('401page');
-}
-
-}
-
+  };
+  
 const register = async (req,res) => {
     res.render('register')
 }

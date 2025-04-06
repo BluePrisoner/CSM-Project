@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const authRouter = require('./routes/auth.js')
 const homeRouter = require('./routes/home.js')
+//const userRouter  = require('./routes/userRoutes.js')
 const errorRouter = require('./routes/errors.js')
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -23,7 +24,7 @@ app.use(cookieParser()); // Use while using jwt tokens
 // app.use(flash());
 
 
-app.use('/', authRouter); 
+app.use('/', authRouter);
 
 
 app.use('/', homeRouter);

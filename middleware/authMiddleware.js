@@ -17,7 +17,7 @@ const authenticateUser = async (req,res,next)=>{
     } catch (error) {
         console.log("Authentication Failed");
         res.clearCookie("token");
-        return res.redirect("/user/login");
+        return res.render('401Page');
     }
 }
 const authenticateAdmin = async (req,res,next)=>{
