@@ -250,8 +250,87 @@ const updatePlanStatus = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   }
+
+  const showUserInfo = async (req, res) => {
+    const userEmail = req.user.email;
+  
+    try {
+      const result = await pool.query(`
+        SELECT c.*, u.email
+        FROM public.customer c
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1;
+      `, [userEmail]);
+  
+      if (result.rowCount === 0) {
+        return res.status(404).send("User not found.");
+      }
+  
+      res.render('user/userinfo', { user: result.rows[0] }, (err, html) => {
+        if (err) {
+          console.error("Error rendering plan:", err);
+          return res.status(500).send("Internal error");
+        }
+  
+        res.render('dashboard', {
+          title: 'Profile',
+          body: html
+        });
+      });
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+  
+  const updateUserInfo = async (req, res) => {
+    const userEmail = req.user.email;
+    const { fname,lname, address, phone } = req.body;
+    
+    const isValidPhone = /^\d{10}$/.test(phone);
+
+   
+    if (!isValidPhone) {
+      return res.send(`
+        <script>
+          alert("Phone number must be exactly 10 digits.");
+          window.history.back();
+        </script>
+      `);
+    }
+  
+  
+    try {
+      // Get user_id from email
+      const userInfo = await pool.query(`
+        SELECT c.*, u.email
+        FROM public.customer c
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1;
+      `, [userEmail]);
+  
+      if (userInfo.rowCount === 0) {
+        return res.status(404).send("User not found.");
+      }
+  
+      const userId = userInfo.rows[0].customer_id;
+  
+      // Update customer details
+      await pool.query(
+        `UPDATE public.customer
+         SET fname = $1,lname = $2, address = $3, phone = $4
+         WHERE customer_id = $5`,
+        [fname,lname, address, phone,userId]
+      );
+  
+      res.redirect("/user/dashboard/userinfo"); // redirect back to the info page
+    } catch (error) {
+      console.error("Error updating user info:", error);
+      res.status(500).send("Failed to update user info.");
+    }
+  };
   
   
   
 
-module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge,renderBilling };
+module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge,renderBilling,showUserInfo,updateUserInfo };
