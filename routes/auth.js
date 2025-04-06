@@ -13,7 +13,7 @@ const {
 const { authenticateUser, authenticateAdmin } = require('../middleware/authMiddleware.js');
 const { redirectIfAuthenticated, redirectIfAuthenticatedAdmin } = require('../middleware/redirectAlreadyAuth.js');
 const {setUserDisplayName} = require('../middleware/fetchUserName.js'); 
-const { renderPlanPage, updatePlanStatus } = require('../controllers/planController');
+const { renderPlanPage, updatePlanStatus, renderSubPage } = require('../controllers/userDashboardController.js');
 
 
 
@@ -28,11 +28,11 @@ router.route('/user/logout').post(logout);
 // Dashboard Home
 router.route('/user/dashboard').get(authenticateUser, dashboard);
 router.route('/user/dashboard/plan').get( authenticateUser, setUserDisplayName, renderPlanPage).post(updatePlanStatus);
+router.route('/user/dashboard/subscription').get(authenticateUser,setUserDisplayName,renderSubPage)
 
 
 // Sub-pages under dashboard
 const dashboardRoutes = [
-    { path: 'subscription', view: 'user/subscription', title: 'Subscription' },
     { path: 'recharge', view: 'user/recharge', title: 'Recharge' },
     { path: 'billing', view: 'user/billing', title: 'Billing' },
     { path: 'userinfo', view: 'user/userinfo', title: 'User Info' },

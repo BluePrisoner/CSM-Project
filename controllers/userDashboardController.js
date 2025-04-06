@@ -88,6 +88,42 @@ const updatePlanStatus = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   };
+  const renderSubPage = async (req, res) => {
+    try {
+      const email = req.user.email;
+  
+      // Fetch all plans (active, paused, inactive) for the logged-in user
+      const result = await pool.query(`
+        SELECT s.*, c.fname, c.lname
+        FROM public.subscription s
+        JOIN public.customer c ON s.customer_id = c.customer_id
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1
+        AND s.status IN ('active', 'paused', 'inactive');
+      `, [email]);
+  
+      const subscriptions = result.rows;
+      const displayName = subscriptions.length > 0 ? `${subscriptions[0].fname} ${subscriptions[0].lname}` : 'User';
+      res.locals.user = displayName;
+  
+      // Render inner page and inject into dashboard
+      res.render('user/subscription', { subscriptions }, (err, html) => {
+        if (err) {
+          console.error("Error rendering plan:", err);
+          return res.status(500).send("Internal error");
+        }
+  
+        res.render('dashboard', {
+          title: 'Subscription',
+          body: html
+        });
+      });
+  
+    } catch (error) {
+      console.error("Plan Page Error:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
   
 
-module.exports = { renderPlanPage,updatePlanStatus };
+module.exports = { renderPlanPage,updatePlanStatus,renderSubPage };

@@ -1,0 +1,28 @@
+<h2>Your Plan History</h2>
+
+<% if (subscriptions && subscriptions.length > 0) { %>
+  <table class="plan-history-table">
+    <thead>
+      <tr>
+        <th>Plan Type</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% subscriptions.forEach(sub => { %>
+        <tr>
+          <td><%= sub.plan_type %></td>
+          <td><%= new Date(sub.start_date).toLocaleDateString() %></td>
+          <td><%= new Date(sub.end_date).toLocaleDateString() %></td>
+          <td>
+            <span class="status-badge status-<%= sub.status.toLowerCase() %>"><%= sub.status %></span>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <p>No subscriptions found.</p>
+<% } %>
