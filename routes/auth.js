@@ -13,6 +13,10 @@ const {
 const { authenticateUser, authenticateAdmin } = require('../middleware/authMiddleware.js');
 const { redirectIfAuthenticated, redirectIfAuthenticatedAdmin } = require('../middleware/redirectAlreadyAuth.js');
 const {setUserDisplayName} = require('../middleware/fetchUserName.js'); 
+const { renderPlanPage, updatePlanStatus } = require('../controllers/planController');
+
+
+
 
 router.use('/user/login/static', express.static(path.join(__dirname, '..', 'public', 'login', 'auth')));
 
@@ -23,10 +27,11 @@ router.route('/user/logout').post(logout);
 
 // Dashboard Home
 router.route('/user/dashboard').get(authenticateUser, dashboard);
+router.route('/user/dashboard/plan').get( authenticateUser, setUserDisplayName, renderPlanPage).post(updatePlanStatus);
+
 
 // Sub-pages under dashboard
 const dashboardRoutes = [
-    { path: 'plan', view: 'user/plan', title: 'Plan' },
     { path: 'subscription', view: 'user/subscription', title: 'Subscription' },
     { path: 'recharge', view: 'user/recharge', title: 'Recharge' },
     { path: 'billing', view: 'user/billing', title: 'Billing' },

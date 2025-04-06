@@ -32,13 +32,13 @@ const adminDashboard = async (req,res)=> {
         console.log(error);
     }
 }
-
 const dashboard = async (req, res) => {
     try {
       if (!req.user || !req.user.email) {
         return res.status(401).send("Unauthorized access");
       }
   
+      // Optional: you can do display name logic here
       const email = req.user.email;
       const userData = await pool.query(`
         SELECT c.*
@@ -52,26 +52,17 @@ const dashboard = async (req, res) => {
       }
   
       const displayName = `${userData.rows[0].fname} ${userData.rows[0].lname}`;
-  
       res.locals.user = displayName;
   
-      res.render('user/plan', {}, (err, html) => {
-        if (err) {
-          console.error("Error rendering plan:", err);
-          return res.status(500).send("Internal error");
-        }
-  
-        res.render('dashboard', {
-          title: 'Plan',
-          body: html
-        });
-      });
+
+      return res.redirect('/user/dashboard/plan');
   
     } catch (error) {
       console.error("Display Name Error", error);
       res.render('401page');
     }
   };
+  
   
 const register = async (req,res) => {
     res.render('register')

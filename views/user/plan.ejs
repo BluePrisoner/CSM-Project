@@ -1,0 +1,30 @@
+<h2>Your Current Plan</h2>
+
+<% if (plan) { %>
+  <div class="plan-card">
+    <p><strong>Plan type:</strong> <%= plan.plan_type %></p>
+    <p><strong>Start Date:</strong> <%= new Date(plan.start_date).toLocaleDateString() %></p>
+    <p><strong>End Date:</strong> <%= new Date(plan.end_date).toLocaleDateString() %></p>
+    <p>
+      <strong>Status:</strong>
+      <span class="status-badge status-<%= plan.status.toLowerCase() %>"><%= plan.status %></span>
+    </p>
+    <form action="/user/dashboard/plan" method="POST" class="status-form">
+      <input type="hidden" name="subscription_id" value="<%= plan.subscription_id %>">
+    
+      <label for="status-select"><strong>Change Status:</strong></label>
+      <select name="status" id="status-select">
+        <option value="active" <%= plan.status.toLowerCase() === 'active' ? 'selected' : '' %>>Active</option>
+        <option value="paused" <%= plan.status.toLowerCase() === 'paused' ? 'selected' : '' %>>Paused</option>
+      </select>
+    
+      <button type="submit">Update Status</button>
+    </form>
+  </div>
+  
+  
+<% } else { %>
+  <div class="plan-card no-plan-card">
+    <p class="no-plan-text">No active plan found.</p>
+  </div>
+<% } %>
