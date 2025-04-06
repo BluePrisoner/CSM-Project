@@ -1,0 +1,30 @@
+<h2>Your Billing History</h2>
+
+<% if (billing && billing.length > 0) { %>
+  <table class="plan-history-table">
+    <thead>
+      <tr>
+        <th>Plan Type</th>
+        <th>Provider</th>
+        <th>Payment Date</th>
+        <th>Amount Paid</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% billing.forEach(bill => { %>
+        <tr>
+          <td><%= bill.plan_type %></td>
+          <td><%= bill.provider_name %></td>
+          <td><%= new Date(bill.bill_date).toLocaleDateString() %></td>
+          <td>₹<%= bill.amount %></td>
+          <td>
+            <span class="status-badge status-<%= bill.status.toLowerCase() %>"><%= bill.status %></span>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <p>No bills found.</p>
+<% } %>

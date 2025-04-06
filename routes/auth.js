@@ -13,7 +13,7 @@ const {
 const { authenticateUser, authenticateAdmin } = require('../middleware/authMiddleware.js');
 const { redirectIfAuthenticated, redirectIfAuthenticatedAdmin } = require('../middleware/redirectAlreadyAuth.js');
 const {setUserDisplayName} = require('../middleware/fetchUserName.js'); 
-const { renderPlanPage, updatePlanStatus, renderSubPage, renderRechargePage, handleRecharge } = require('../controllers/userDashboardController.js');
+const { renderPlanPage, updatePlanStatus, renderSubPage, renderRechargePage, handleRecharge, renderBilling } = require('../controllers/userDashboardController.js');
 
 
 
@@ -30,12 +30,13 @@ router.route('/user/dashboard').get(authenticateUser, dashboard);
 router.route('/user/dashboard/plan').get( authenticateUser, setUserDisplayName, renderPlanPage).post(updatePlanStatus);
 router.route('/user/dashboard/subscription').get(authenticateUser,setUserDisplayName,renderSubPage)
 router.route('/user/dashboard/recharge').get(authenticateUser,setUserDisplayName,renderRechargePage).post(authenticateUser,handleRecharge);
+router.route('/user/dashboard/billing').get(authenticateUser,setUserDisplayName,renderBilling);
 
 
 
 // Sub-pages under dashboard
 const dashboardRoutes = [
-    { path: 'billing', view: 'user/billing', title: 'Billing' },
+
     { path: 'userinfo', view: 'user/userinfo', title: 'User Info' },
     { path: 'support', view: 'user/support', title: 'Support' }
   ];

@@ -109,6 +109,10 @@ h2 {
   background-color: #eaffea;
   color: #2ecc71;
 }
+.status-success {
+  background-color: #eaffea;
+  color: #2ecc71;
+}
 
 .no-plan-card {
   background: linear-gradient(135deg, #eeeeee, #dddddd);
@@ -130,6 +134,10 @@ h2 {
 
 
 .status-inactive {
+  background-color: #ffe6e6;
+  color: #e74c3c;
+}
+.status-failure {
   background-color: #ffe6e6;
   color: #e74c3c;
 }

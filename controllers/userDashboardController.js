@@ -202,10 +202,10 @@ const updatePlanStatus = async (req, res) => {
   
       // Step 4: Insert into billing table
       const insertBilling = `
-        INSERT INTO billing (customer_id, provider_name, bill_date, amount,status)
-        VALUES ($1, $2, CURRENT_DATE, $3,$4)
+        INSERT INTO billing (customer_id, provider_name, bill_date, amount,status,plan_type)
+        VALUES ($1, $2, CURRENT_DATE, $3,$4,$5)
       `;
-      await pool.query(insertBilling, [customer_id, provider_name, total_price,'success']);
+      await pool.query(insertBilling, [customer_id, provider_name, total_price,'success',plan_type]);
   
       res.redirect('/user/dashboard?flash=Recharge successful!');
     } catch (error) {
@@ -215,9 +215,43 @@ const updatePlanStatus = async (req, res) => {
   };
 
 
+  const renderBilling = async (req,res)=>{
+    try {
+      const email = req.user.email;
   
+      // Fetch all plans (active, paused, inactive) for the logged-in user
+      const result = await pool.query(`
+        SELECT b.*, c.fname, c.lname
+        FROM public.billing b
+        JOIN public.customer c ON b.customer_id = c.customer_id
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1
+      `, [email]);
+  
+      const billing = result.rows;
+      const displayName = billing.length > 0 ? `${billing[0].fname} ${billing[0].lname}` : 'User';
+      res.locals.user = displayName;
+  
+      // Render inner page and inject into dashboard
+      res.render('user/billing', { billing }, (err, html) => {
+        if (err) {
+          console.error("Error rendering plan:", err);
+          return res.status(500).send("Internal error");
+        }
+  
+        res.render('dashboard', {
+          title: 'Billing',
+          body: html
+        });
+      });
+  
+    } catch (error) {
+      console.error("Plan Page Error:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
   
   
   
 
-module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge };
+module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge,renderBilling };
