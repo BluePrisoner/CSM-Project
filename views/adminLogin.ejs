@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <title>Admin</title>
+</head>
+<body>
+    <h1>Admin Login</h1>
+    <form action="/admin/login" method="post" id="admin-login-form">
+        <div>
+            <input type="text" id = "email", name = "email", placeholder="Enter Username/Email" required>
+        </div>
+        <div>
+            <input type="password" id = "password", name = "password", placeholder="Enter Password" required>
+        </div>
+
+        <div>
+            <input type="submit" value="Login">
+        </div>
+        <a href="/">Go back to home page</a>
+    </form>
+    <ul>
+        <% if (typeof errors !== 'undefined') { %>
+            <% errors.forEach(function(error) { %>
+                <li><%= error.message %></li>
+            <% }); %>
+        <% } %>
+    </ul>
+    <div class="success">
+        Login Successfull, redirecting.....
+    </div>
+    <div class="failure">
+        Invalid Username or Password
+    </div>
+    <script src="/js/adminLogin.js"></script>
+</body>
+</html>

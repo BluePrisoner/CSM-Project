@@ -13,6 +13,25 @@ const login = async (req,res) => {
     }
     res.render('login', {errors : [{message : message}]});
 }
+const adminLogin = async (req,res) => {
+
+    const message =  req.query.message;
+    if(!message){
+        return res.render('adminLogin');
+    }
+    res.render('adminLogin', {errors : [{message : message}]});
+}
+
+const adminDashboard = async (req,res)=> {
+    try {
+        if (!req.user || !req.user.email) {
+            return res.status(401).send("Unauthorized access");
+        }
+        return res.render('adminDashboard');
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const dashboard = async (req,res) => {
 
@@ -105,9 +124,45 @@ const loginPayLoad = async (req,res) => {
     }
 }
 
+const adminLoginPayload = async (req,res)=>{
+    let {email,password} = req.body;
+    try {
+        const user = await pool.query(`SELECT * FROM public.user where email = $1 and role = 'admin';`,[email]);
+        console.log(email,password);
+        if(user.rows.length===0){
+            return res.json({ success: false, message: "Invalid username or password" });
+
+        }
+        const isMatch = await bcrypt.compare(password, user.rows[0].password);
+        if(!isMatch){
+            return  res.json({ success: false, message: "Invalid username or password" });
+
+        }
+        console.log("accepted");
+        const token = await jwt.sign({id : user.rows[0].id, email: user.rows[0].email},process.env.JWT_SECRET_KEY,{expiresIn:'6h'});
+
+        res.cookie("token",token,{
+            httpOnly: true,
+            sameSite:"Strict",
+            secure:false //set it to true in production
+        })
+       return res.json({success : true});
+
+    } catch (error) {
+        console.log("Database Server Error", error);
+        res.status(500).send("Server Error");
+    }
+}
+
 const logout = async (req,res)=>{
     res.clearCookie("token");
     console.log("Token Cleared, Logged out")
     return res.redirect("/user/login");
 }
-module.exports  = {login,dashboard,register,registerPayload,loginPayLoad,logout};
+
+const logoutAdmin = async (req,res)=>{
+    res.clearCookie("token");
+    console.log("Token Cleared, Logged out")
+    return res.redirect("/admin/login");
+}
+module.exports  = {login,dashboard,register,registerPayload,loginPayLoad,logout,adminLogin,adminLoginPayload,adminDashboard,logoutAdmin};
