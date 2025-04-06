@@ -49,6 +49,7 @@ try {
     return res.render('dashboard', {user : displayName})
 } catch (error) {
     console.log("Display Name Error", error);
+    res.render('401page');
 }
 
 }
