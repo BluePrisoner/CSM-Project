@@ -1,0 +1,40 @@
+
+<h2>Technical Support</h2>
+<form action="/user/dashboard/support" method="POST" class="support-form">
+
+  
+    <label for="subject">Subject of the Issue:</label>
+    <input type="text" id="subject" name="subject" required placeholder="e.g. Channels not working">
+  
+    <label for="category">Category:</label>
+    <select name="category" id="category">
+      <option value="connectivity">Connectivity</option>
+      <option value="billing">Billing</option>
+      <option value="plan">Plan Issue</option>
+      <option value="other">Other</option>
+    </select>
+  
+    <label for="description">Describe the Issue:</label>
+    <textarea id="description" name="description" rows="5" required placeholder="Provide details about the issue..."></textarea>
+  
+    <button type="submit">Submit Complaint</button>
+  </form>
+
+  <% if (complaints && complaints.length > 0) { %>
+    <div class="support-form">
+      <h3>Your Submitted Complaints</h3>
+      <ul>
+        <% let x = 1 %>
+        <% complaints.forEach(c => { %>
+          <li style="margin-bottom: 15px;">
+           <b><%= x++ %>.</b> <strong>Subject:</strong> <%= c.subject %><br />
+            <strong>Category:</strong> <%= c.category %><br />
+            <strong>Description:</strong> <%= c.issue_description %><br />
+            <small><em>Submitted: <%= new Date(c.created_at).toLocaleString() %></em></small>
+            <strong>Status:</strong> <%= c.status %><br />
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+  

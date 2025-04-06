@@ -438,6 +438,102 @@ h2 {
   flex: 1;
 }
 
+/*Support*/
+
+.support-form {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: #fff;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  max-width: 650px;
+  margin: 30px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.support-form h2,
+.support-form h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.support-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.support-form input,
+.support-form select,
+.support-form textarea {
+  width: calc(100% - 4px); /* Ensures no overflow */
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  margin-right: 2px;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #ffffff;
+  color: #27ae60;
+  font-weight: 500;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.support-form textarea {
+  resize: vertical;
+}
+
+.support-form input:focus,
+.support-form select:focus,
+.support-form textarea:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  border-color: #ffffff;
+}
+
+.support-form button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  color: #27ae60;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.support-form button:hover {
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+
+.support-form ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.support-form li {
+  background-color: #ffffff;
+  color: #27ae60;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}
+
+.support-form small {
+  color: #555;
+  display: block;
+  margin-top: 5px;
+}
 
 
 /* Logout button */

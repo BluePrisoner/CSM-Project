@@ -329,8 +329,84 @@ const updatePlanStatus = async (req, res) => {
       res.status(500).send("Failed to update user info.");
     }
   };
+
+  const renderSupport = async (req, res) => {
+
+    const userEmail = req.user.email;
+    try {
+      const result = await pool.query(`
+        SELECT c.*
+        FROM public.customer c
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1;
+      `, [userEmail]);
+  
+      if (result.rowCount === 0) {
+        return res.status(404).send("User not found.");
+      }
+
+      const userId = result.rows[0].customer_id;
+
+      const complaintsResults = await pool.query(`
+        SELECT t.*
+        FROM public.technical_support t
+        WHERE t.customer_id = $1
+        ORDER BY t.created_at DESC;
+        `, [userId]);
+  
+      res.render('user/support', {complaints : complaintsResults.rows},(err, html) => {
+        if (err) {
+          console.error("Error rendering Support page:", err);
+          return res.status(500).send("Internal error");
+        }
+  
+        res.render('dashboard', {
+          title: 'Support',
+          body: html
+        });
+      });
+  
+    } catch (error) {
+      console.error("Support Page Error:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+
+
+  const submitComplaint = async (req, res) => {
+    const userEmail = req.user.email;
+    const { subject, category, description } = req.body;
+  
+    try {
+      const result = await pool.query(`
+        SELECT c.*
+        FROM public.customer c
+        JOIN public.user u ON c.user_id = u.user_id
+        WHERE u.email = $1;
+      `, [userEmail]);
+  
+      if (result.rowCount === 0) {
+        return res.status(404).send("User not found.");
+      }
+  
+      const customerId = result.rows[0].customer_id;
+  
+      // Insert complaint into technical_support
+      await pool.query(`
+        INSERT INTO public.technical_support (customer_id, subject, category, issue_description,status)
+        VALUES ($1, $2, $3, $4, $5);
+      `, [customerId, subject, category, description,'pending']);
+  
+      res.redirect("/user/dashboard/support"); // redirect to the support page to see the submitted complaint
+    } catch (error) {
+      console.error("Error submitting complaint:", error);
+      res.status(500).send("Failed to submit support complaint.");
+    }
+  };
+  
+
   
   
   
 
-module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge,renderBilling,showUserInfo,updateUserInfo };
+module.exports = { renderPlanPage,updatePlanStatus,renderSubPage,renderRechargePage,handleRecharge,renderBilling,showUserInfo,updateUserInfo,renderSupport,submitComplaint };

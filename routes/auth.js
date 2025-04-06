@@ -13,7 +13,7 @@ const {
 const { authenticateUser, authenticateAdmin } = require('../middleware/authMiddleware.js');
 const { redirectIfAuthenticated, redirectIfAuthenticatedAdmin } = require('../middleware/redirectAlreadyAuth.js');
 const {setUserDisplayName} = require('../middleware/fetchUserName.js'); 
-const { renderPlanPage, updatePlanStatus, renderSubPage, renderRechargePage, handleRecharge, renderBilling, showUserInfo, updateUserInfo } = require('../controllers/userDashboardController.js');
+const { renderPlanPage, updatePlanStatus, renderSubPage, renderRechargePage, handleRecharge, renderBilling, showUserInfo, updateUserInfo, renderSupport, submitComplaint } = require('../controllers/userDashboardController.js');
 
 
 
@@ -32,27 +32,10 @@ router.route('/user/dashboard/subscription').get(authenticateUser,setUserDisplay
 router.route('/user/dashboard/recharge').get(authenticateUser,setUserDisplayName,renderRechargePage).post(authenticateUser,handleRecharge);
 router.route('/user/dashboard/billing').get(authenticateUser,setUserDisplayName,renderBilling);
 router.route('/user/dashboard/userinfo').get(authenticateUser,setUserDisplayName,showUserInfo).post(authenticateUser,updateUserInfo);
+router.route('/user/dashboard/support').get(authenticateUser,setUserDisplayName,renderSupport).post(authenticateUser,submitComplaint)
 
 
 
-// Sub-pages under dashboard
-const dashboardRoutes = [
-
-    { path: 'userinfo', view: 'user/userinfo', title: 'User Info' },
-    { path: 'support', view: 'user/support', title: 'Support' }
-  ];
-  
-  dashboardRoutes.forEach(({ path, view, title }) => {
-    router.get(`/user/dashboard/${path}`, authenticateUser, setUserDisplayName, (req, res) => {
-      res.render(view, {}, (err, html) => {
-        if (err) {
-          console.log(`Error rendering ${view}:`, err);
-          return res.status(500).send("Internal error");
-        }
-        res.render('dashboard', { title, body: html }); // res.locals.user will be available in all templates
-      });
-    });
-  });
   
 
 // Admin Routes
