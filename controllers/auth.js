@@ -48,7 +48,9 @@ const dashboard = async (req, res) => {
       `, [email]);
   
       if (!userData.rows.length) {
-        return res.status(404).send("User not found");
+        res.clearCookie("token");
+        console.log("Token Cleared, Logged out")
+        return res.redirect("/user/login");
       }
   
       const displayName = `${userData.rows[0].fname} ${userData.rows[0].lname}`;

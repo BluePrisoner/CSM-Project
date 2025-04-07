@@ -37,7 +37,7 @@
           </td>
           
           <td>
-            <form action="/admin/dashboard/list/" method="POST" class="delete-customer-form">
+            <form action="/admin/dashboard/list/" method="POST" class="delete-customer-form" id="delete-customer-form">
               <input type="hidden" name="customer_id" value="<%= c.customer_id %>">
               <button type="button" class="delete-btn" onclick="showConfirmation(this)">Delete</button>
             </form>
@@ -64,7 +64,7 @@
 
   function showConfirmation(button) {
     // Find the form this button belongs to
-    formToSubmit = button.closest('delete-customer-form');
+    formToSubmit = button.closest('.delete-customer-form');
     overlay.style.display = 'flex';
   }
 

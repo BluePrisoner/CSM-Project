@@ -14,7 +14,7 @@ const { authenticateUser, authenticateAdmin } = require('../middleware/authMiddl
 const { redirectIfAuthenticated, redirectIfAuthenticatedAdmin } = require('../middleware/redirectAlreadyAuth.js');
 const {setUserDisplayName} = require('../middleware/fetchUserName.js'); 
 const { renderPlanPage, updatePlanStatus, renderSubPage, renderRechargePage, handleRecharge, renderBilling, showUserInfo, updateUserInfo, renderSupport, submitComplaint } = require('../controllers/userDashboardController.js');
-const { renderList, renderComplaints } = require('../controllers/adminDashboardController.js');
+const { renderList, renderComplaints, updateComplaints, deleteCustomer } = require('../controllers/adminDashboardController.js');
 
 
 
@@ -42,8 +42,8 @@ router.route('/user/dashboard/support').get(authenticateUser,setUserDisplayName,
 // Admin Routes
 router.route('/admin/login').get(redirectIfAuthenticatedAdmin, adminLogin).post(adminLoginPayload);
 router.route('/admin/dashboard').get(authenticateAdmin, adminDashboard);
-router.route('/admin/dashboard/list').get(authenticateAdmin, renderList);
-router.route('/admin/dashboard/complaints').get(authenticateAdmin, renderComplaints);
+router.route('/admin/dashboard/list').get(authenticateAdmin, renderList).post(authenticateAdmin,deleteCustomer);
+router.route('/admin/dashboard/complaints').get(authenticateAdmin, renderComplaints).post(authenticateAdmin,updateComplaints);
 router.route('/admin/logout').post(logoutAdmin);
 
 module.exports = router;

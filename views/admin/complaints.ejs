@@ -1,0 +1,45 @@
+<h2 style="text-align:center;">Complaints</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer ID</th>
+        <th>Subject</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>Resolution Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% complaints.forEach(function(complaint) { %>
+        <tr>
+          <td><%= complaint.ticket_id %></td>
+          <td><%= complaint.customer_id %></td>
+          <td><%= complaint.subject %></td>
+          <td><%= complaint.category %></td>
+          <td><%= complaint.issue_description %></td>
+          <td><%= new Date(complaint.created_at).toLocaleString() %></td>
+          <td><%= new Date(complaint.updated_at).toLocaleString() %></td>
+          <td>
+            <%= complaint.resolution_date 
+                  ? new Date(complaint.resolution_date).toLocaleDateString() 
+                  : '--' %>
+          </td>
+          
+
+          <td>
+            <form action="/admin/dashboard/complaints" method="POST">
+            <input type="hidden" name="ticket_id" value="<%= complaint.ticket_id  %>" >
+              <select name="status" onchange="this.form.submit()" class="status-select <%= complaint.status %>">
+                <option value="pending" <%= complaint.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                <option value="resolved" <%= complaint.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+              </select>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>

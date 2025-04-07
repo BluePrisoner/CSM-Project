@@ -44,7 +44,13 @@ const deleteCustomer = async(req,res)=>{
 }
 const renderComplaints = async(req,res) =>{
     try {
-        res.render('admin/complaints', (err, html) => {
+
+      const result = await pool.query(`
+          select * from public.technical_support;
+        `)
+
+      const complaints = result.rows;
+        res.render('admin/complaints',{complaints}, (err, html) => {
             if (err) {
               console.error("Error rendering plan:", err);
               return res.status(500).send("Internal error");
@@ -61,4 +67,26 @@ const renderComplaints = async(req,res) =>{
     }
 }
 
-module.exports = {renderList,renderComplaints};
+const updateComplaints = async(req,res)=>{
+  try {
+    const {ticket_id,status} = req.body;
+    console.log(req.body);
+    await pool.query(`
+      UPDATE public.technical_support
+      SET status = $1,
+          updated_at = NOW()::timestamp,
+          resolution_date = CASE 
+            WHEN $1::varchar= 'resolved' THEN NOW()::date
+            ELSE NULL
+          END
+      WHERE ticket_id = $2
+
+      `,[status,ticket_id]);
+      res.redirect('/admin/dashboard/complaints');
+  } catch (error) {
+    console.error("Complaints Page Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+module.exports = {renderList,renderComplaints,updateComplaints,deleteCustomer};

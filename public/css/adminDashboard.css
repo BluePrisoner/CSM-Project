@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -37,6 +37,7 @@ body {
     color: white;
     padding: 15px 25px;
     text-decoration: none;
+    border-color: solid 2px #27ae60;
     font-weight: 500;
     transition: background 0.3s;
   }
@@ -172,6 +173,37 @@ body {
     background-color: #fff7cc;
     color: #f39c12;
   }
+
+  .status-select {
+    background-color: white;
+    color: #2ecc71;
+    border: 2px solid #2ecc71;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-right: 10px;
+  }
+  
+  .status-form select:focus {
+    outline: none;
+    border-color: #27ae60;
+    box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+  }
+  
+  .status-select.resolved {
+    background-color: #eaffea;
+    color: #2ecc71;
+  }
+  
+  .status-select.pending {
+    background-color: #fff7cc;
+    color: #f39c12;
+    border-color: #f39c12;
+  }
+  
 
   .overlay {
     position: fixed;
