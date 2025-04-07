@@ -27,7 +27,7 @@ const adminDashboard = async (req,res)=> {
         if (!req.user || !req.user.email) {
             return res.status(401).send("Unauthorized access");
         }
-        return res.render('adminDashboard');
+        return res.redirect('/admin/dashboard/list');
     } catch (error) {
         console.log(error);
     }

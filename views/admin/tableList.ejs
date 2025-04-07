@@ -1,0 +1,84 @@
+<h2>All Registered Customers</h2>
+
+
+<div style="overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Customer ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Plan type</th>
+        <th>Provider Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% customers.forEach(c => { %>
+        <tr>
+          <td><%= c.customer_id %></td>
+          <td><%= c.fname %></td>
+          <td><%= c.lname %></td>
+          <td><%= c.email %></td>
+          <td><%= c.phone || '-' %></td>
+          <td><%= c.address || '-' %></td>
+          <td><%= c.plan_type %></td>
+          <td><%= c.provider_name %></td>
+          <td><%= new Date(c.start_date).toLocaleDateString() %></td>
+          <td><%= new Date(c.end_date).toLocaleDateString() %></td>
+          <td style="text-align: center; vertical-align: middle;">
+            <span class="status-badge status-<%= c.status.toLowerCase() %>"><%= c.status %></span>
+          </td>
+          
+          <td>
+            <form action="/admin/dashboard/list/" method="POST" class="delete-customer-form">
+              <input type="hidden" name="customer_id" value="<%= c.customer_id %>">
+              <button type="button" class="delete-btn" onclick="showConfirmation(this)">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<div class="overlay" id="confirmationOverlay" style="display: none;">
+  <div class="payment-card">
+    <h2>Delete Confirmation</h2>
+    <p>Are you sure you want to proceed with this action?</p>
+    <button onclick="submitPayment()">Yes, Confirm</button>
+    <button onclick="closeOverlay()" style="margin-left: 10px;">Cancel</button>
+  </div>
+</div>
+
+<script>
+  
+  const overlay = document.getElementById('confirmationOverlay');
+  let formToSubmit = null;
+
+  function showConfirmation(button) {
+    // Find the form this button belongs to
+    formToSubmit = button.closest('delete-customer-form');
+    overlay.style.display = 'flex';
+  }
+
+  function closeOverlay() {
+    overlay.style.display = 'none';
+    formToSubmit = null;
+  }
+
+  function submitPayment() {
+    if (formToSubmit) {
+      formToSubmit.submit();
+    }
+  }
+</script>
+
+
+
